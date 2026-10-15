@@ -23,9 +23,9 @@ class ActionItem {
 // List of action items displayed in the grid
 const List<ActionItem> actionItems = [
   ActionItem(icon: Icons.sync_alt, label: 'Transfer', iconColor: primaryBlue),
-  ActionItem(icon: Icons.wallet_outlined, label: 'Payment', iconColor: primaryBlue),
-  ActionItem(icon: Icons.shopping_cart_outlined, label: 'Shop', iconColor: primaryBlue),
-  ActionItem(icon: Icons.apps, label: 'Other', iconColor: primaryBlue),
+  ActionItem(icon: Icons.wallet_outlined, label: 'Deposit', iconColor: primaryBlue),
+  ActionItem(icon: Icons.shopping_cart_outlined, label: 'Loan', iconColor: primaryBlue),
+  ActionItem(icon: Icons.apps, label: 'Card', iconColor: primaryBlue),
 ];
 
 
@@ -483,6 +483,10 @@ class ActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        if (item.label == 'Deposit') {
+          Navigator.pushNamed(context, '/deposit');
+          return;
+        }
         print('Tapped ${item.label}');
       },
       borderRadius: BorderRadius.circular(15),

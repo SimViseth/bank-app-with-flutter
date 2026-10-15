@@ -8,6 +8,7 @@ import 'account_page.dart';
 import 'transaction_page.dart';
 import 'security_page.dart';
 import 'change_password_page.dart';
+import 'term_deposit_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const MyHomePage(),
         '/qr_payment': (context) => const QrPaymentPage(),
         '/transactions': (context) => const TransactionPage(),
+        '/deposit': (context) => const TermDepositPage(),
         '/account': (context) => const AccountPage(),
         '/security': (context) => const SecurityPage(),
         '/change_password': (context) => const ChangePasswordPage(),
