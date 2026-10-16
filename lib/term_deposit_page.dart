@@ -141,10 +141,11 @@ class _TermDepositVerificationPageState
         (userData['card_number_suffix'] == null
             ? 'Not available'
             : '•••• ${userData['card_number_suffix']}');
+    final name = userData['name'];
 
     return {
-      'name': userData['name'] ?? user.displayName ?? 'User',
-      'accountNumber': accountNumber,
+      'name': name is String && name.isNotEmpty ? name : user.displayName ?? 'User',
+      'accountNumber': accountNumber.toString(),
     };
   }
 
