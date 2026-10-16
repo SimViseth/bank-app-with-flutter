@@ -10,7 +10,7 @@ class TermDepositPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: const Text('Deposit', style: TextStyle(color: Colors.white)),
+        title: const Text('Term Deposits', style: TextStyle(color: Colors.white)),
         backgroundColor: _depositPrimaryBlue,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -26,7 +26,7 @@ class TermDepositPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _DepositInput(
-                label: 'Account',
+                label: 'From Account',
                 hint: 'Enter account',
                 keyboardType: TextInputType.text,
               ),
@@ -41,6 +41,12 @@ class TermDepositPage extends StatelessWidget {
                 label: 'Amount',
                 hint: 'Enter amount',
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
+              ),
+              SizedBox(height: 20),
+              _DepositInput(
+                label: 'Renewal Option',
+                hint: 'Enter renewal option',
+                keyboardType: TextInputType.text,
               ),
             ],
           ),
