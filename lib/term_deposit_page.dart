@@ -150,10 +150,12 @@ class _TermDepositVerificationPageState
   }
 
   void _confirmTransaction() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Term deposit details confirmed.')),
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => const TermDepositSuccessPage(),
+      ),
     );
-    Navigator.pop(context);
   }
 
   @override
@@ -243,28 +245,7 @@ class _TermDepositVerificationPageState
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: const Column(
-                    children: [
-                      _StatementRow(label: 'Deposit amount', value: '3,000\$'),
-                      _StatementRow(
-                        label: 'Term Deposit Type',
-                        value: 'Hi-Growth',
-                      ),
-                      _StatementRow(label: 'Deposit Term', value: '12 months'),
-                      _StatementRow(
-                        label: 'Renewal Option',
-                        value: 'Principal (1 time)',
-                      ),
-                      _StatementRow(
-                        label: 'Total interest',
-                        value: '109.98 USD',
-                      ),
-                      _StatementRow(
-                        label: 'Interest payment date',
-                        value: '22-Feb-2027',
-                      ),
-                    ],
-                  ),
+                  child: const _TermDepositStatement(),
                 ),
                 const SizedBox(height: 16),
                 Container(
@@ -299,6 +280,69 @@ class _TermDepositVerificationPageState
           );
         },
       ),
+    );
+  }
+}
+
+class TermDepositSuccessPage extends StatelessWidget {
+  const TermDepositSuccessPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+      appBar: AppBar(
+        title: const Text('Term Deposit', style: TextStyle(color: Colors.white)),
+        backgroundColor: _depositPrimaryBlue,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 24),
+            const Icon(Icons.check_circle, color: Color(0xFF2E7D32), size: 88),
+            const SizedBox(height: 16),
+            const Text(
+              'Success',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Color(0xFF2E7D32),
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 24),
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: const _TermDepositStatement(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TermDepositStatement extends StatelessWidget {
+  const _TermDepositStatement();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      children: [
+        _StatementRow(label: 'Deposit amount', value: '3,000\$'),
+        _StatementRow(label: 'Term Deposit Type', value: 'Hi-Growth'),
+        _StatementRow(label: 'Deposit Term', value: '12 months'),
+        _StatementRow(label: 'Renewal Option', value: 'Principal (1 time)'),
+        _StatementRow(label: 'Total interest', value: '109.98 USD'),
+        _StatementRow(label: 'Interest payment date', value: '22-Feb-2027'),
+      ],
     );
   }
 }
