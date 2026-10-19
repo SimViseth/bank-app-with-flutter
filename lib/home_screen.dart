@@ -23,11 +23,18 @@ class ActionItem {
 // List of action items displayed in the grid
 const List<ActionItem> actionItems = [
   ActionItem(icon: Icons.sync_alt, label: 'Transfer', iconColor: primaryBlue),
-  ActionItem(icon: Icons.wallet_outlined, label: 'Deposit', iconColor: primaryBlue),
-  ActionItem(icon: Icons.shopping_cart_outlined, label: 'Loan', iconColor: primaryBlue),
+  ActionItem(
+    icon: Icons.wallet_outlined,
+    label: 'Deposit',
+    iconColor: primaryBlue,
+  ),
+  ActionItem(
+    icon: Icons.shopping_cart_outlined,
+    label: 'Loan',
+    iconColor: primaryBlue,
+  ),
   ActionItem(icon: Icons.apps, label: 'Card', iconColor: primaryBlue),
 ];
-
 
 // 3. MAIN PAGE STRUCTURE
 class MyHomePage extends StatefulWidget {
@@ -90,7 +97,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      
     );
   }
 }
@@ -105,10 +111,11 @@ class _HomePageContent extends StatelessWidget {
     if (user == null) return null;
 
     //Fetch the document using the current user's UID
-    final docSnapshot = await FirebaseFirestore.instance
-      .collection('users')
-      .doc(user.uid)
-      .get();
+    final docSnapshot =
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
 
     return docSnapshot.data();
   }
@@ -116,8 +123,8 @@ class _HomePageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //Use FutureBuilder to fetch data once
-    return FutureBuilder<Map<String,dynamic>?>(
-      future: _fetchUserData(), 
+    return FutureBuilder<Map<String, dynamic>?>(
+      future: _fetchUserData(),
       builder: (context, snapshot) {
         //Handle loading state
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -146,7 +153,7 @@ class _HomePageContent extends StatelessWidget {
           return _buildContent(
             name: fallbackName,
             balance: fallbackBalance,
-            cardNumberSuffix: fallbackCardSuffix
+            cardNumberSuffix: fallbackCardSuffix,
           );
         }
 
@@ -155,9 +162,10 @@ class _HomePageContent extends StatelessWidget {
         //Default to a safe value if the field is missing
         final name = userData['name'] ?? 'User';
         //Format balance to 2 decimal places, default is '0.00'
-        final balance = (userData['account_balance'] is num)
-          ? userData['account_balance'].toStringAsFixed(2)
-          : '0.00';
+        final balance =
+            (userData['account_balance'] is num)
+                ? userData['account_balance'].toStringAsFixed(2)
+                : '0.00';
         final cardNumberSuffix = userData['card_number_suffix'] ?? 'XXXX';
 
         //Build content, passing dynamic data
@@ -166,7 +174,7 @@ class _HomePageContent extends StatelessWidget {
           balance: balance,
           cardNumberSuffix: cardNumberSuffix,
         );
-      }
+      },
     );
   }
 
@@ -176,20 +184,23 @@ class _HomePageContent extends StatelessWidget {
     required String balance,
     required String cardNumberSuffix,
   }) {
-      return SingleChildScrollView(
-        child: Column(
-          children: [
-
-            //Pass dynamic data to children
-            HeaderSection(name: name),
-            BankCardWidget(name: name, balance: balance, cardNumberSuffix: cardNumberSuffix),
-            ActionGridSection(),
-            TransactionHistorySection(),
-          ],
-        ),
-      );
-    }
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          //Pass dynamic data to children
+          HeaderSection(name: name),
+          BankCardWidget(
+            name: name,
+            balance: balance,
+            cardNumberSuffix: cardNumberSuffix,
+          ),
+          ActionGridSection(),
+          TransactionHistorySection(),
+        ],
+      ),
+    );
   }
+}
 
 // 5. HEADER SECTION
 // Top section with gradient background and greeting
@@ -206,10 +217,10 @@ class HeaderSection extends StatelessWidget {
           height: 150,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [secondaryBlue,primaryBlue],
+              colors: [secondaryBlue, primaryBlue],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-            )
+            ),
           ),
         ),
 
@@ -224,7 +235,7 @@ class HeaderSection extends StatelessWidget {
               _buildGreeting(),
             ],
           ),
-        )
+        ),
       ],
     );
   }
@@ -248,11 +259,11 @@ class HeaderSection extends StatelessWidget {
             const SizedBox(width: 8),
             _buildCircleIcon(Icons.notifications_none),
             const SizedBox(width: 8),
-            _buildCircleIconWithAction(Icons.logout, () async{
+            _buildCircleIconWithAction(Icons.logout, () async {
               await FirebaseAuth.instance.signOut();
             }),
           ],
-        )
+        ),
       ],
     );
   }
@@ -299,10 +310,14 @@ class HeaderSection extends StatelessWidget {
             ),
             Text(
               name,
-              style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-            )
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ],
-        )
+        ),
       ],
     );
   }
@@ -315,16 +330,16 @@ class BankCardWidget extends StatelessWidget {
   final String cardNumberSuffix;
 
   const BankCardWidget({
-    super.key, 
-    required this.name, 
-    required this.balance, 
-    required this.cardNumberSuffix
+    super.key,
+    required this.name,
+    required this.balance,
+    required this.cardNumberSuffix,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16,vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       padding: const EdgeInsets.all(20),
       height: 250,
       decoration: BoxDecoration(
@@ -339,8 +354,8 @@ class BankCardWidget extends StatelessWidget {
             color: Colors.black.withOpacity(0.25),
             blurRadius: 10,
             offset: const Offset(0, 5),
-          )
-        ]
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -361,7 +376,7 @@ class BankCardWidget extends StatelessWidget {
       children: [
         Icon(Icons.credit_card, size: 40, color: Colors.yellow[800]),
         const Text(
-          'VISA', 
+          'VISA',
           style: TextStyle(
             color: Colors.white,
             fontSize: 28,
@@ -372,10 +387,10 @@ class BankCardWidget extends StatelessWidget {
                 blurRadius: 5,
                 color: Colors.black54,
                 offset: Offset(1, 1),
-              )
-            ]
+              ),
+            ],
           ),
-        )
+        ),
       ],
     );
   }
@@ -391,8 +406,12 @@ class BankCardWidget extends StatelessWidget {
         SizedBox(height: 4),
         Text(
           '\$$balance',
-          style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
-        )
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ],
     );
   }
@@ -400,7 +419,12 @@ class BankCardWidget extends StatelessWidget {
   Widget _buildCardNumber() {
     return Text(
       '**** **** **** $cardNumberSuffix',
-      style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold, letterSpacing: 4),
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        letterSpacing: 4,
+      ),
     );
   }
 
@@ -417,7 +441,11 @@ class BankCardWidget extends StatelessWidget {
             ),
             Text(
               name.toUpperCase(),
-              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ],
         ),
@@ -430,10 +458,14 @@ class BankCardWidget extends StatelessWidget {
             ),
             Text(
               '12/26',
-              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
-            )
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ],
-        )
+        ),
       ],
     );
   }
@@ -454,7 +486,11 @@ class ActionGridSection extends StatelessWidget {
           children: [
             const Text(
               'What would you like to do today?',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
             const SizedBox(height: 15),
             GridView.count(
@@ -464,7 +500,8 @@ class ActionGridSection extends StatelessWidget {
               mainAxisSpacing: 10,
               crossAxisSpacing: 10,
               childAspectRatio: 0.8,
-              children: actionItems.map((item) => ActionButton(item:item)).toList(),
+              children:
+                  actionItems.map((item) => ActionButton(item: item)).toList(),
             ),
           ],
         ),
@@ -483,6 +520,10 @@ class ActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        if (item.label == 'Transfer') {
+          Navigator.pushNamed(context, '/transfer');
+          return;
+        }
         if (item.label == 'Deposit') {
           Navigator.pushNamed(context, '/deposit');
           return;
@@ -501,8 +542,8 @@ class ActionButton extends StatelessWidget {
               spreadRadius: 1,
               blurRadius: 3,
               offset: const Offset(0, 1),
-            )
-          ]
+            ),
+          ],
         ),
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
         child: Column(
@@ -518,7 +559,7 @@ class ActionButton extends StatelessWidget {
                 fontWeight: FontWeight.w500,
                 color: Colors.black87,
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -542,7 +583,7 @@ class TransactionHistorySection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-    
+
     if (user == null) {
       return const SizedBox.shrink();
     }
@@ -574,7 +615,11 @@ class TransactionHistorySection extends StatelessWidget {
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       children: [
-                        Icon(Icons.error_outline, color: Colors.red[300], size: 40),
+                        Icon(
+                          Icons.error_outline,
+                          color: Colors.red[300],
+                          size: 40,
+                        ),
                         const SizedBox(height: 10),
                         Text(
                           'Error loading transactions',
@@ -583,7 +628,10 @@ class TransactionHistorySection extends StatelessWidget {
                         const SizedBox(height: 5),
                         Text(
                           '${snapshot.error}',
-                          style: TextStyle(color: Colors.grey[500], fontSize: 12),
+                          style: TextStyle(
+                            color: Colors.grey[500],
+                            fontSize: 12,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -617,16 +665,17 @@ class TransactionHistorySection extends StatelessWidget {
                 final transactions = snapshot.data!.docs;
 
                 return Column(
-                  children: transactions.take(5).map((doc) {
-                    final data = doc.data() as Map<String, dynamic>;
-                    return TransactionRow(
-                      type: data['type'] ?? 'debit',
-                      description: data['description'] ?? 'Transaction',
-                      category: data['category'] ?? 'General',
-                      amount: (data['amount'] ?? 0.0).toDouble(),
-                      timestamp: data['timestamp'] as Timestamp?,
-                    );
-                  }).toList(),
+                  children:
+                      transactions.take(5).map((doc) {
+                        final data = doc.data() as Map<String, dynamic>;
+                        return TransactionRow(
+                          type: data['type'] ?? 'debit',
+                          description: data['description'] ?? 'Transaction',
+                          category: data['category'] ?? 'General',
+                          amount: (data['amount'] ?? 0.0).toDouble(),
+                          timestamp: data['timestamp'] as Timestamp?,
+                        );
+                      }).toList(),
                 );
               },
             ),
@@ -643,7 +692,11 @@ class TransactionHistorySection extends StatelessWidget {
       children: [
         const Text(
           'Transaction History',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
         ),
         TextButton(
           onPressed: () {
@@ -651,9 +704,13 @@ class TransactionHistorySection extends StatelessWidget {
           },
           child: const Text(
             'See All',
-            style: TextStyle(fontSize: 16, color: primaryBlue, fontWeight: FontWeight.w600),
+            style: TextStyle(
+              fontSize: 16,
+              color: primaryBlue,
+              fontWeight: FontWeight.w600,
+            ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -712,11 +769,7 @@ class TransactionRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: color.withOpacity(0.3), width: 1),
       ),
-      child: Icon(
-        icon,
-        color: color,
-        size: 24,
-      ),
+      child: Icon(icon, color: color, size: 24),
     );
   }
 
@@ -738,10 +791,7 @@ class TransactionRow extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             subtitle,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[600],
-            ),
+            style: TextStyle(fontSize: 14, color: Colors.grey[600]),
           ),
         ],
       ),
@@ -780,7 +830,7 @@ class _TransactionRowSkeleton extends StatelessWidget {
             spreadRadius: 1,
             blurRadius: 3,
             offset: const Offset(0, 1),
-          )
+          ),
         ],
       ),
       child: const SkeletonContainer(width: 24, height: 24, radius: 4),
