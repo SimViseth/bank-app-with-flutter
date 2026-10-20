@@ -78,7 +78,10 @@ class TransferPage extends StatelessWidget {
                   () => Navigator.push(
                     context,
                     MaterialPageRoute<void>(
-                      builder: (_) => const TransferOwnAccountsPage(),
+                      builder:
+                          (_) => const TransferEntryPage(
+                            title: 'Transfer Own Accounts',
+                          ),
                     ),
                   ),
             ),
@@ -87,7 +90,17 @@ class TransferPage extends StatelessWidget {
               icon: Icons.swap_horiz,
               title: 'Transfer to other account',
               subtitle: 'Send money to another bank account',
-              onTap: () => Navigator.pushNamed(context, '/qr_payment'),
+              onTap:
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder:
+                          (_) => const TransferEntryPage(
+                            title: 'Transfer to other account',
+                            requiresManualToAccount: true,
+                          ),
+                    ),
+                  ),
             ),
           ],
         ),
@@ -133,17 +146,24 @@ class _TransferOption extends StatelessWidget {
   }
 }
 
-class TransferOwnAccountsPage extends StatefulWidget {
-  const TransferOwnAccountsPage({super.key});
+class TransferEntryPage extends StatefulWidget {
+  final String title;
+  final bool requiresManualToAccount;
+
+  const TransferEntryPage({
+    super.key,
+    required this.title,
+    this.requiresManualToAccount = false,
+  });
 
   @override
-  State<TransferOwnAccountsPage> createState() =>
-      _TransferOwnAccountsPageState();
+  State<TransferEntryPage> createState() => _TransferEntryPageState();
 }
 
-class _TransferOwnAccountsPageState extends State<TransferOwnAccountsPage> {
+class _TransferEntryPageState extends State<TransferEntryPage> {
   final _formKey = GlobalKey<FormState>();
   final _amountController = TextEditingController();
+  final _toAccountController = TextEditingController();
   late final Future<TransferProfile> _profileFuture;
   TransferAccount? _fromAccount;
   TransferAccount? _toAccount;
@@ -157,6 +177,7 @@ class _TransferOwnAccountsPageState extends State<TransferOwnAccountsPage> {
   @override
   void dispose() {
     _amountController.dispose();
+    _toAccountController.dispose();
     super.dispose();
   }
 
@@ -218,7 +239,13 @@ class _TransferOwnAccountsPageState extends State<TransferOwnAccountsPage> {
   void _continueToVerification(TransferProfile profile) {
     if (!_formKey.currentState!.validate()) return;
     final fromAccount = _fromAccount!;
-    final toAccount = _toAccount!;
+    final toAccount =
+        widget.requiresManualToAccount
+            ? TransferAccount(
+              number: _toAccountController.text.trim(),
+              currency: fromAccount.currency,
+            )
+            : _toAccount!;
     final amount = double.parse(_amountController.text.trim());
 
     Navigator.push(
@@ -242,7 +269,7 @@ class _TransferOwnAccountsPageState extends State<TransferOwnAccountsPage> {
     return Scaffold(
       backgroundColor: _transferBackground,
       appBar: AppBar(
-        title: const Text('Transfer Own Accounts'),
+        title: Text(widget.title),
         backgroundColor: _transferPrimaryBlue,
         foregroundColor: Colors.white,
       ),
@@ -268,12 +295,31 @@ class _TransferOwnAccountsPageState extends State<TransferOwnAccountsPage> {
 
           final profile = snapshot.data!;
           _fromAccount ??= profile.accounts.first;
-          _toAccount ??= profile.accounts[1];
+          _toAccount ??=
+              profile.accounts.length > 1 ? profile.accounts[1] : _fromAccount;
+          _toAccountController.text =
+              _toAccountController.text.isEmpty &&
+                      widget.requiresManualToAccount
+                  ? _toAccount?.number ?? ''
+                  : _toAccountController.text;
           return Form(
             key: _formKey,
             child: ListView(
               padding: const EdgeInsets.all(20),
               children: [
+                const SizedBox(height: 8),
+                const _TransferHeader(),
+                const SizedBox(height: 20),
+                Text(
+                  widget.title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: _transferPrimaryBlue,
+                  ),
+                ),
+                const SizedBox(height: 20),
                 _accountDropdown(
                   label: 'From account',
                   value: _fromAccount,
@@ -282,12 +328,31 @@ class _TransferOwnAccountsPageState extends State<TransferOwnAccountsPage> {
                       (account) => setState(() => _fromAccount = account),
                 ),
                 const SizedBox(height: 18),
-                _accountDropdown(
-                  label: 'To account',
-                  value: _toAccount,
-                  accounts: profile.accounts,
-                  onChanged: (account) => setState(() => _toAccount = account),
-                ),
+                widget.requiresManualToAccount
+                    ? TextFormField(
+                      controller: _toAccountController,
+                      decoration: InputDecoration(
+                        labelText: 'To account',
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      validator: (value) {
+                        if ((value ?? '').trim().isEmpty) {
+                          return 'Enter a destination account';
+                        }
+                        return null;
+                      },
+                    )
+                    : _accountDropdown(
+                      label: 'To account',
+                      value: _toAccount,
+                      accounts: profile.accounts,
+                      onChanged:
+                          (account) => setState(() => _toAccount = account),
+                    ),
                 const SizedBox(height: 18),
                 TextFormField(
                   controller: _amountController,
@@ -359,6 +424,27 @@ class _TransferOwnAccountsPageState extends State<TransferOwnAccountsPage> {
               .toList(),
       onChanged: onChanged,
       validator: (account) => account == null ? 'Select an account' : null,
+    );
+  }
+}
+
+class _TransferHeader extends StatelessWidget {
+  const _TransferHeader();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 32,
+          backgroundColor: const Color(0xFFE8ECF5),
+          child: const Icon(
+            Icons.sync_alt,
+            size: 36,
+            color: _transferPrimaryBlue,
+          ),
+        ),
+      ],
     );
   }
 }
