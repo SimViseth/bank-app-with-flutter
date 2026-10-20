@@ -24,16 +24,16 @@ class ActionItem {
 const List<ActionItem> actionItems = [
   ActionItem(icon: Icons.sync_alt, label: 'Transfer', iconColor: primaryBlue),
   ActionItem(
-    icon: Icons.wallet_outlined,
+    icon: Icons.savings_outlined,
     label: 'Deposit',
     iconColor: primaryBlue,
   ),
   ActionItem(
-    icon: Icons.shopping_cart_outlined,
+    icon: Icons.request_quote_outlined,
     label: 'Loan',
     iconColor: primaryBlue,
   ),
-  ActionItem(icon: Icons.apps, label: 'Card', iconColor: primaryBlue),
+  ActionItem(icon: Icons.credit_card, label: 'Card', iconColor: primaryBlue),
 ];
 
 // 3. MAIN PAGE STRUCTURE
