@@ -248,34 +248,10 @@ class _LoanRequestPageState extends State<LoanRequestPage> {
                     .map(
                       (collateral) => DropdownMenuItem(
                         value: collateral,
-                        child: SizedBox(
-                          width: 260,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    collateral.number,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  Text(collateral.currency),
-                                ],
-                              ),
-                              Text(
-                                'Maturity ${collateral.maturityDate}  ${collateral.amount}',
-                                style: TextStyle(
-                                  color: Colors.grey[700],
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
+                        child: Text(
+                          '${collateral.number}  ${collateral.currency}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     )
@@ -290,6 +266,17 @@ class _LoanRequestPageState extends State<LoanRequestPage> {
               }
             },
           ),
+          if (_selectedCollateral case final collateral?) ...[
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text(
+                'Maturity ${collateral.maturityDate}  ${collateral.amount} '
+                '${collateral.currency}',
+                style: TextStyle(color: Colors.grey[700], fontSize: 13),
+              ),
+            ),
+          ],
           if (_showCalculation) ...[
             const SizedBox(height: 20),
             _LoanDetailsCard(
