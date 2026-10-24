@@ -577,14 +577,19 @@ class LoanStatusPage extends StatelessWidget {
               ('Expire date', '22-Feb-2027'),
               ('Status', 'Success'),
             ],
+            
+            dividerBeforeLast: true,
+          ),
+          _LoanDetailsCard(
             rows: [
               ('Collateral', 'MM0000023'),
               ('Loan size', '9,000,000 KHR'),
               ('Interest rate', '8.75% p.a'),
               ('Request date', '22-Feb-2026'),
               ('Expire date', '22-Feb-2027'),
-              ('Status', 'Fail'),
+              ('Status', 'Failed'),
             ],
+            
             dividerBeforeLast: true,
           ),
         ],
