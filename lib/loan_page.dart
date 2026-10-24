@@ -292,7 +292,7 @@ class _LoanRequestPageState extends State<LoanRequestPage> {
             const Text(
               'You are eligible to apply for a loan against your Term Deposit.',
               style: TextStyle(
-                color: Colors.green,
+                color: Colors.black,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -539,7 +539,7 @@ class _LoanSuccessHeader extends StatelessWidget {
                 const Text(
                   'Loan Size: 9,000,000 KHR',
                   style: TextStyle(
-                    color: Colors.green,
+                    color: _loanPrimaryBlue,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
