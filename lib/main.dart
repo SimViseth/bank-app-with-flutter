@@ -10,6 +10,7 @@ import 'security_page.dart';
 import 'change_password_page.dart';
 import 'term_deposit_page.dart';
 import 'transfer_page.dart';
+import 'loan_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         '/security': (context) => const SecurityPage(),
         '/change_password': (context) => const ChangePasswordPage(),
         '/transfer': (context) => const TransferPage(),
+        '/loan': (context) => const LoanMenuPage(),
       },
     );
   }

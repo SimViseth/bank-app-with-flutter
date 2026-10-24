@@ -528,6 +528,10 @@ class ActionButton extends StatelessWidget {
           Navigator.pushNamed(context, '/deposit');
           return;
         }
+        if (item.label == 'Loan') {
+          Navigator.pushNamed(context, '/loan');
+          return;
+        }
         print('Tapped ${item.label}');
       },
       borderRadius: BorderRadius.circular(15),
