@@ -525,7 +525,7 @@ class ActionButton extends StatelessWidget {
           return;
         }
         if (item.label == 'Deposit') {
-          Navigator.pushNamed(context, '/deposit');
+          Navigator.pushNamed(context, '/deposit_menu');
           return;
         }
         if (item.label == 'Loan') {
