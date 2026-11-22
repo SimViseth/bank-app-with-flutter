@@ -8,15 +8,16 @@ import 'account_page.dart';
 import 'transaction_page.dart';
 import 'security_page.dart';
 import 'change_password_page.dart';
+import 'term_deposit_page.dart';
+import 'transfer_page.dart';
+import 'loan_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-/// 1. APP ENTRY POINT 
+/// 1. APP ENTRY POINT
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -27,10 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Banking App UI',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: 'Roboto'
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Roboto'),
       debugShowCheckedModeBanner: false,
       home: const AuthWrapper(),
 
@@ -39,9 +37,14 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const MyHomePage(),
         '/qr_payment': (context) => const QrPaymentPage(),
         '/transactions': (context) => const TransactionPage(),
+        '/deposit_menu': (context) => const TermDepositMenuPage(),
+        '/deposit': (context) => const TermDepositPage(),
+        '/deposit_status': (context) => const TermDepositStatusPage(),
         '/account': (context) => const AccountPage(),
         '/security': (context) => const SecurityPage(),
         '/change_password': (context) => const ChangePasswordPage(),
+        '/transfer': (context) => const TransferPage(),
+        '/loan': (context) => const LoanMenuPage(),
       },
     );
   }
@@ -54,14 +57,12 @@ class AuthWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(), 
+      stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         //Show loading indicator while checking auth state
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
+            body: Center(child: CircularProgressIndicator()),
           );
         }
 
@@ -72,7 +73,7 @@ class AuthWrapper extends StatelessWidget {
 
         //if user is not logged in, show auth screen
         return const AuthScreen();
-      }
+      },
     );
   }
 }
